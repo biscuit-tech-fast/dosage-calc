@@ -1,0 +1,294 @@
+{
+  "schema": 1,
+  "fetched_at": "2026-10-13",
+  "note": "酵母参数全部来自厂商公开产品页，逐条注明 source_url。厂商未公布的项一律留 null，不臆造。要加株：往 strains 数组里追加一条，或跑 scripts/fetch-strain.js 抓草稿。",
+  "generic_referment_rate_g_per_l": {
+    "min": 0.05,
+    "max": 0.1
+  },
+  "generic_rate_basis": "按 10^6 cells/mL 目标接种浓度、干酵母 ≥1×10^10 cfu/g 推算（Fermentis F-2 页面载明该活菌数）。行业通识，非某一株的数据表值。",
+  "strains": [
+    {
+      "id": "lalvin-ec-1118",
+      "name": "Lalvin EC-1118",
+      "brand": "Lallemand",
+      "form": "dry",
+      "use": [
+        "瓶中二发",
+        "起泡基酒",
+        "苹果酒"
+      ],
+      "alcohol_tolerance_pct": 18,
+      "temp_min_c": 10,
+      "temp_max_c": 30,
+      "inoculation_g_per_l": {
+        "min": 0.2,
+        "max": 0.4
+      },
+      "inoculation_raw": "0.2-0.4 g/L",
+      "inoculation_basis": "primary",
+      "rehydration": null,
+      "flocculation": null,
+      "killer_factor": null,
+      "aroma": "中性",
+      "nitrogen": null,
+      "note": "厂商原文：『The Original Prise de Mousse，选自著名起泡酒产区，用于起泡基酒及瓶内二次发酵』—— 是这十株里官方明确写了 in-bottle 的一株。⚠️ 行业通识（非厂商数据表）：EC-1118 絮凝性偏低，泥较松散，转瓶和冰塞法除渣会比高絮凝株更费劲。",
+      "source_url": "https://www.lallemandbrewing.com/en/united-states/products/lalvin-ec-1118/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "lalvin-icv-k1-v1116",
+      "name": "Lalvin ICV K1-V1116",
+      "brand": "Lallemand",
+      "form": "dry",
+      "use": [
+        "瓶中二发",
+        "耐高酒精"
+      ],
+      "alcohol_tolerance_pct": 18,
+      "temp_min_c": 10,
+      "temp_max_c": 35,
+      "inoculation_g_per_l": {
+        "min": 0.2,
+        "max": 0.4
+      },
+      "inoculation_raw": "0.2-0.4 g/L",
+      "inoculation_basis": "primary",
+      "rehydration": null,
+      "flocculation": null,
+      "killer_factor": null,
+      "aroma": "花香酯（香蕉、新鲜红色水果）",
+      "nitrogen": null,
+      "note": "温度上限到 35℃，是这十株里最宽的。香气偏果香型 —— 用在苹果酒上会盖掉一部分果味。厂商页面未列絮凝性/杀手因子。",
+      "source_url": "https://www.lallemandbrewing.com/en/united-states/products/lalvin-icv-k1-v1116/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "lalvin-icv-d47",
+      "name": "Lalvin ICV D47",
+      "brand": "Lallemand",
+      "form": "dry",
+      "use": [
+        "瓶中二发",
+        "圆润风格"
+      ],
+      "alcohol_tolerance_pct": 15,
+      "temp_min_c": 15,
+      "temp_max_c": 30,
+      "inoculation_g_per_l": {
+        "min": 0.2,
+        "max": 0.4
+      },
+      "inoculation_raw": "0.2-0.4 g/L",
+      "inoculation_basis": "primary",
+      "rehydration": null,
+      "flocculation": null,
+      "killer_factor": null,
+      "aroma": "热带水果与白色花香",
+      "nitrogen": null,
+      "note": "酒精耐受 15%，是这十株里偏低的 —— 高酒精度苹果酒要留意。香气偏饱满圆润。厂商页面未列絮凝性/杀手因子。",
+      "source_url": "https://www.lallemandbrewing.com/en/united-states/products/lalvin-icv-d47/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "lalvin-qa23",
+      "name": "Lalvin QA23",
+      "brand": "Lallemand",
+      "form": "dry",
+      "use": [
+        "瓶中二发",
+        "果香风格"
+      ],
+      "alcohol_tolerance_pct": 16,
+      "temp_min_c": 14,
+      "temp_max_c": 28,
+      "inoculation_g_per_l": {
+        "min": 0.2,
+        "max": 0.4
+      },
+      "inoculation_raw": "0.2-0.4 g/L",
+      "inoculation_basis": "primary",
+      "rehydration": null,
+      "flocculation": null,
+      "killer_factor": null,
+      "aroma": "新鲜百香果 / 菠萝",
+      "nitrogen": null,
+      "note": "果香最突出的一株，适合做果味向苹果酒；但如果目标是中性起泡风格，它会抢戏。厂商页面未列絮凝性/杀手因子。",
+      "source_url": "https://www.lallemandbrewing.com/en/united-states/products/lalvin-qa23/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "lalvin-71b",
+      "name": "Lalvin 71B",
+      "brand": "Lallemand",
+      "form": "dry",
+      "use": [
+        "主发酵",
+        "降酸"
+      ],
+      "alcohol_tolerance_pct": 15,
+      "temp_min_c": 15,
+      "temp_max_c": 30,
+      "inoculation_g_per_l": {
+        "min": 0.2,
+        "max": 0.4
+      },
+      "inoculation_raw": "0.2-0.4 g/L（厂商 FAQ）",
+      "inoculation_basis": "primary",
+      "rehydration": null,
+      "flocculation": null,
+      "killer_factor": null,
+      "aroma": "热带水果与香蕉",
+      "nitrogen": null,
+      "note": "⚠️ 厂商原文：主发酵期可代谢 20-40% 的苹果酸（会降酸），官方定位是『年轻、新鲜、易饮』的酒，并且明说会『轻易进入苹果酸-乳酸发酵』。瓶中二发要在瓶里放几个月，这株不是为此设计的。本工具保留它只为对照 —— 若你实做效果很好，以你的数据为准。",
+      "source_url": "https://www.lallemandbrewing.com/en/united-states/products/lalvin-71b/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "fermentis-safoeno-spk-05",
+      "name": "Fermentis SafŒno SPK 05",
+      "brand": "Fermentis",
+      "form": "dry",
+      "use": [
+        "瓶中二发",
+        "起泡酒 prise de mousse",
+        "香槟/Prosecco/Crémant"
+      ],
+      "alcohol_tolerance_pct": 15,
+      "temp_min_c": 10,
+      "temp_max_c": 30,
+      "inoculation_g_per_l": null,
+      "inoculation_raw": "静酒 20 g/hL；『Prise de mousse: specific protocol upon request』",
+      "inoculation_basis": null,
+      "rehydration": {
+        "water_multiple": 10,
+        "water_temp_min_c": 15,
+        "water_temp_max_c": 37,
+        "rest_minutes": 20,
+        "direct_possible": true,
+        "note": "可直接投放；或倒入 10 倍重量的 15-37℃ 自来水，轻搅防结块，静置 20 分钟。之后可继续驯化：每次加入 1/2 体积的葡萄汁静置 10 分钟，直到与发酵罐温差 <10℃。"
+      },
+      "flocculation": null,
+      "killer_factor": null,
+      "aroma": "中性",
+      "nitrogen": "低氮需求（YAN/糖 = 0.7-0.8）",
+      "note": "⚠️ 这是十株里唯一官方明确标『Prise de mousse（瓶中二发）』用途的菌株 —— 但厂商把瓶中二发的投量写成『specific protocol upon request』，没有公开数字。页面上的 20 g/hL 是【静酒】用量，不要直接当二发投量。要准确数字请向 Fermentis 索取。低温（14℃）动力学依然快而稳定。",
+      "source_url": "https://fermentis.com/en/product/safoeno-spk-05/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "fermentis-safale-f-2",
+      "name": "Fermentis SafAle F-2",
+      "brand": "Fermentis",
+      "form": "dry",
+      "use": [
+        "瓶中二发",
+        "桶中二发"
+      ],
+      "alcohol_tolerance_pct": 10,
+      "temp_min_c": 15,
+      "temp_max_c": 25,
+      "inoculation_g_per_l": {
+        "min": 0.02,
+        "max": 0.35
+      },
+      "inoculation_raw": "2-35 g/hL at 15-25°C",
+      "inoculation_basis": "refermentation",
+      "rehydration": {
+        "water_multiple": 10,
+        "water_temp_min_c": 25,
+        "water_temp_max_c": 29,
+        "rest_minutes": null,
+        "direct_possible": false,
+        "note": "厂商明确：『不应直接在啤酒中复水』。要把酵母撒进 ≥10 倍重量的无菌水里，水温 25-29℃，然后再与加过糖的啤酒混合。"
+      },
+      "flocculation": "high",
+      "killer_factor": null,
+      "aroma": "中性（不干扰基酒风味）",
+      "nitrogen": null,
+      "note": "★ 十株里唯一【专为瓶中/桶中二发设计】且【公开了投量】的一株：2-35 g/hL。厂商还给了配套糖量 5-10 g/L（对应 2.5-5.0 g/L CO₂）。泥沉降均匀（有利除渣）。⚠️ 但酒精耐受 <10% vol —— 酒精度高的苹果酒要当心。15℃ 以下碳酸化可能要 2 周以上。",
+      "source_url": "https://fermentis.com/en/product/safale-f-2/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "fermentis-safcider-tf-6",
+      "name": "Fermentis SafCider TF-6",
+      "brand": "Fermentis",
+      "form": "dry",
+      "use": [
+        "苹果酒",
+        "主发酵",
+        "高比重"
+      ],
+      "alcohol_tolerance_pct": null,
+      "temp_min_c": 10,
+      "temp_max_c": 30,
+      "inoculation_g_per_l": null,
+      "inoculation_raw": "20-40 g/hL（first fermentation）",
+      "inoculation_basis": null,
+      "rehydration": {
+        "water_multiple": 10,
+        "water_temp_min_c": null,
+        "water_temp_max_c": null,
+        "rest_minutes": 20,
+        "direct_possible": true,
+        "note": "① 直接投放：撒在 ≥10 倍重量的果汁表面。② 先复水：撒进 10 倍重量的【室温】自来水，轻搅防结块，静置 20 分钟，再泵入罐中（带充气）。"
+      },
+      "flocculation": null,
+      "killer_factor": true,
+      "aroma": "中性",
+      "nitrogen": "高氮需求（YAN/糖 >0.9）",
+      "note": "苹果酒专用、带杀伤因子，对果糖同化好，适合高比重苹果汁。⚠️ 厂商给 20-40 g/hL 时写的是『for first fermentation』（主发酵），**没有给瓶中二发投量** —— 别直接套用。理想的发酵温度是 15-25℃。",
+      "source_url": "https://fermentis.com/en/product/safcider-tf-6/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "wyeast-4021",
+      "name": "Wyeast 4021 Dry White / Sparkling",
+      "brand": "Wyeast",
+      "form": "liquid",
+      "use": [
+        "瓶中二发",
+        "起泡酒"
+      ],
+      "alcohol_tolerance_pct": 17,
+      "temp_min_c": 13,
+      "temp_max_c": 24,
+      "inoculation_g_per_l": null,
+      "inoculation_raw": "液体酵母，厂商未给 g/L 投量",
+      "inoculation_basis": null,
+      "rehydration": null,
+      "flocculation": "medium",
+      "killer_factor": null,
+      "aroma": "中性",
+      "nitrogen": null,
+      "note": "液体酵母（不是干粉），无复水问题，但需要按厂商建议做活化或扩培。酒精耐受 17%，絮凝性中等 —— 除渣比低絮凝株容易。",
+      "source_url": "https://wyeastlab.com/product/dry-whitesparkling/",
+      "fetched_at": "2026-10-13"
+    },
+    {
+      "id": "wyeast-4766",
+      "name": "Wyeast 4766 Cider",
+      "brand": "Wyeast",
+      "form": "liquid",
+      "use": [
+        "苹果酒",
+        "瓶中二发"
+      ],
+      "alcohol_tolerance_pct": 12,
+      "temp_min_c": 16,
+      "temp_max_c": 24,
+      "inoculation_g_per_l": null,
+      "inoculation_raw": "液体酵母，厂商未给 g/L 投量",
+      "inoculation_basis": null,
+      "rehydration": null,
+      "flocculation": "low",
+      "killer_factor": null,
+      "aroma": "苹果酒典型",
+      "nitrogen": null,
+      "note": "苹果酒专用液体酵母。⚠️ 絮凝性【低】→ 泥不容易聚成紧实的塞，转瓶要多走几天，冰塞法除渣更易残留。酒精耐受 12%，偏高酒精度的苹果酒要当心。",
+      "source_url": "https://wyeastlab.com/product/cider/",
+      "fetched_at": "2026-10-13"
+    }
+  ]
+}

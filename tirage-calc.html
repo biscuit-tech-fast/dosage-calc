@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1B4B72">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="瓶中二发计算">
+<title>瓶内二次发酵计算器 · TIRAGE · OLD APPPPLE</title>
+<style>
+:root{
+  --navy:#1B4B72; --navy2:#2A6491; --bg:#F4F7FA; --card:#FFFFFF; --line:#DCE4EC;
+  --txt:#16202B; --sub:#5A6B7B; --ok:#15803D; --okbg:#ECFDF3;
+  --warn:#B45309; --warnbg:#FFF4E5; --danger:#B91C1C; --dangerbg:#FEECEC;
+  --info:#1B4B72; --infobg:#EEF4FA;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg);color:var(--txt);font-size:15px;line-height:1.5;padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+header{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:calc(14px + env(safe-area-inset-top)) 16px 14px}
+header h1{margin:0;font-size:17px;font-weight:700;letter-spacing:.3px}
+header p{margin:3px 0 0;font-size:11.5px;opacity:.72}
+.wrap{max-width:760px;margin:0 auto;padding:0 12px}
+nav{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;gap:5px;padding:10px 12px 8px;
+  max-width:760px;margin:0 auto;border-bottom:1px solid var(--line)}
+nav button{flex:1;min-height:42px;border:1px solid var(--line);background:#fff;color:var(--sub);border-radius:10px;
+  font-size:13.5px;font-weight:600;cursor:pointer;font-family:inherit;padding:0 4px}
+nav button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.panel{display:none}.panel.on{display:block}
+details.card{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}
+details.card>summary{list-style:none;cursor:pointer;padding:13px 14px;font-weight:700;font-size:14.5px;color:var(--navy)}
+details.card>summary::-webkit-details-marker{display:none}
+.body{padding:0 14px 14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:420px){.grid{grid-template-columns:1fr}}
+label.f{display:block}
+label.f span{display:block;font-size:12px;color:var(--sub);margin-bottom:4px}
+label.f small{color:#93A2B0;font-size:11px}
+input,select{width:100%;min-height:44px;padding:9px 11px;border:1px solid var(--line);border-radius:9px;
+  font-size:16px;font-family:inherit;background:#fff;color:var(--txt)}
+input:focus,select:focus{outline:none;border-color:var(--navy2);box-shadow:0 0 0 3px rgba(42,100,145,.12)}
+.seg{display:flex;gap:5px;flex-wrap:wrap}
+.seg button{flex:1;min-width:64px;min-height:44px;border:1px solid var(--line);background:#fff;border-radius:9px;
+  font-size:14px;font-weight:600;color:var(--sub);cursor:pointer;font-family:inherit}
+.seg button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.hint{font-size:11.5px;color:#8494A2;margin:6px 0 0;line-height:1.45}
+.req{color:#C2410C;font-weight:700}
+.sub{font-size:12.5px;font-weight:700;color:var(--navy);margin:16px 0 8px;padding-bottom:5px;border-bottom:1px solid var(--line)}
+.res{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden}
+.res h2{margin:0;padding:13px 14px;font-size:14.5px;color:var(--navy);border-bottom:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 14px;text-align:left;font-size:13.5px;border-bottom:1px solid #EEF2F6}
+th{width:56%;font-weight:500;color:var(--sub)}
+td{font-weight:700;text-align:right;font-variant-numeric:tabular-nums}
+tr:last-child td,tr:last-child th{border-bottom:none}
+td .u{font-weight:400;color:var(--sub);font-size:11.5px;margin-left:2px}
+td.big{font-size:16px;color:var(--navy)}
+td.txt{text-align:left;font-weight:600;color:var(--navy);font-size:13px;line-height:1.45}
+td.sep{text-align:center;color:#C3CDD8;font-size:11px;padding:4px}
+.note{display:block;font-weight:400;color:#93A3B2;font-size:11px;line-height:1.45;margin-top:3px}
+.warn{border-radius:10px;padding:11px 13px;margin:9px 0;font-size:13px;line-height:1.55;border-left:4px solid}
+.warn b{display:block;margin-bottom:2px;font-size:13px}
+.w-danger{background:var(--dangerbg);border-color:var(--danger);color:#7F1D1D}
+.w-warn{background:var(--warnbg);border-color:var(--warn);color:#7C2D12}
+.w-ok{background:var(--okbg);border-color:var(--ok);color:#14532D}
+.w-info{background:var(--infobg);border-color:var(--info);color:#1E3A5F}
+.notice{background:var(--infobg);border:1px solid #C7DAEA;border-left:4px solid var(--navy);border-radius:12px;padding:14px;margin:12px 0}
+.notice h3{margin:0 0 9px;font-size:14px;color:var(--navy)}
+.notice ol{margin:0;padding-left:19px}
+.notice li{font-size:12.6px;color:#33414F;line-height:1.6;margin-bottom:6px}
+.notice button{width:100%;min-height:42px;margin-top:11px;border-radius:9px;border:1px solid var(--navy);
+  background:#fff;color:var(--navy);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.tip{background:#fff;border:1px solid var(--line);border-left:4px solid var(--navy2);border-radius:10px;
+  padding:11px 13px;margin:10px 0;font-size:12.6px;color:#33414F;line-height:1.6}
+.tip b{color:var(--navy)}
+.actions{display:flex;gap:8px;margin:12px 0}
+.actions button{flex:1;min-height:44px;border-radius:10px;border:1px solid var(--line);background:#fff;
+  font-size:14px;font-weight:600;color:var(--navy);cursor:pointer;font-family:inherit}
+.actions button.pri{background:var(--navy);color:#fff;border-color:var(--navy)}
+.strain{border:1px solid var(--line);border-radius:10px;padding:11px 12px;margin:9px 0;background:#fff}
+.strain h4{margin:0 0 5px;font-size:14px;color:var(--navy)}
+.strain .meta{font-size:11.5px;color:var(--sub);line-height:1.6}
+.strain .tag{display:inline-block;background:var(--infobg);color:var(--navy);border-radius:4px;
+  padding:1px 6px;font-size:10.5px;margin-right:4px;font-weight:600}
+.strain .src{font-size:10px;color:#A8B6C4;word-break:break-all;margin-top:5px}
+.strain .flag{color:#B45309;font-size:11.5px;margin-top:5px}
+.ref{padding:2px 0 20px}
+.ref h3{font-size:14px;color:var(--navy);margin:18px 0 7px}
+.ref p,.ref li{font-size:13.2px;color:#33414F;line-height:1.6}
+.ref code{background:#EDF2F7;padding:1px 5px;border-radius:4px;font-size:12.5px;color:#0F3A5F}
+footer{text-align:center;font-size:11px;color:#95A3B1;padding:22px 16px 0;line-height:1.6}
+#dataWarn{display:none}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>瓶内二次发酵计算器</h1>
+    <p>TIRAGE · OLD APPPPLE · 估算工具，须实测校核</p>
+  </div>
+</header>
+
+<nav>
+  <button data-tab="forward" class="on">正算</button>
+  <button data-tab="reverse">反算</button>
+  <button data-tab="strains">酵母库</button>
+  <button data-tab="ref">参考</button>
+</nav>
+
+<div class="wrap">
+
+  <div id="dataWarn"></div>
+
+  <div class="notice" id="firstNotice">
+    <h3>⚠️ 用之前先知道这五件事</h3>
+    <ol>
+      <li><b>压力由糖决定，不由酵母决定。</b>化学计量是固定的（4.04 g/L 蔗糖 → 1 体积 CO₂）。换什么酵母，这个数都不变。酵母只决定<b>能不能发完</b>。</li>
+      <li><b>这是估算工具，不是实测。</b>用亨利定律 + 纯水系数，实际苹果酒含乙醇会略低，所以算出的压力<b>略偏高</b>。用于预警时偏安全。</li>
+      <li><b>瓶塞和瓶身是两个独立问题。</b>瓶塞扛不住 → 漏气崩盖；<b>瓶身扛不住 → 直接炸瓶</b>。耐压以瓶厂规格为准。</li>
+      <li><b>酵母参数来自厂商公开资料</b>，每条都标了来源和抓取日期。厂商改版会过时，<b>用前请核对原始数据表</b>。</li>
+      <li><b>再发酵风险只能靠加速试验判定</b>（4℃/20℃/33℃ 各放几瓶，4 周）。工具算不出"会不会真发酵"。</li>
+    </ol>
+    <button id="btnDismissNotice">知道了，不再显示</button>
+  </div>
+
+  <!-- ============ 共用输入 ============ -->
+  <div id="inputArea">
+
+    <details class="card" open>
+      <summary>① 必须填</summary>
+      <div class="body">
+        <p class="hint" style="margin-top:0">带 <b class="req">★</b> 的是必填。这几项决定气压和糖量。</p>
+
+        <label class="f"><span>瓶型 <b class="req">★</b></span></label>
+        <div class="seg" id="segBottle">
+          <button data-v="330">330 ml</button>
+          <button data-v="375">375 ml</button>
+          <button data-v="500">500 ml</button>
+          <button data-v="750" class="on">750 ml</button>
+          <button data-v="1500">1.5 L</button>
+        </div>
+
+        <div class="grid" style="margin-top:12px">
+          <label class="f"><span>酵母 <b class="req">★</b></span>
+            <select id="strain"></select></label>
+          <label class="f"><span>批量（瓶数）</span><input id="bottles" type="number" inputmode="numeric" step="1" value="100"></label>
+          <label class="f"><span>酒温 <small>℃</small></span><input id="tempC" type="number" inputmode="decimal" step="0.5" value="20"></label>
+          <label class="f"><span>基酒酒精度 <small>%vol</small></span><input id="baseAbv" type="number" inputmode="decimal" step="0.1" value="6.0"></label>
+          <label class="f"><span>基酒残糖 <small>g/L</small></span><input id="baseSugar" type="number" inputmode="decimal" step="0.1" value="0"></label>
+        </div>
+        <p class="hint">基酒残糖按 0 算最保守 —— 如果基酒还有糖，它会额外产气，实际压力会比算出的大。</p>
+
+        <p class="sub">本次要补的东西</p>
+        <div class="grid">
+          <label class="f"><span>糖的种类 <b class="req">★</b></span>
+            <select id="sugarType">
+              <option value="sucrose">蔗糖（白砂糖）</option>
+              <option value="glucose">葡萄糖（无水）</option>
+              <option value="dextrose">葡萄糖（一水）</option>
+            </select></label>
+          <label class="f" id="wrapSugar"><span id="lblSugar">补糖量 <b class="req">★</b> <small>g/L</small></span><input id="sugar" type="number" inputmode="decimal" step="0.5" value="8"></label>
+          <label class="f" id="wrapPressure"><span id="lblPressure">目标瓶内压 <b class="req">★</b> <small>bar</small></span><input id="targetP" type="number" inputmode="decimal" step="0.1" value="3.5"></label>
+        </div>
+        <p class="hint" id="modeHint"></p>
+      </div>
+    </details>
+
+    <details class="card">
+      <summary>② 选填 · 顶空与悬浮液</summary>
+      <div class="body">
+        <div class="grid">
+          <label class="f"><span>顶空体积 <small>ml</small></span><input id="head" type="number" inputmode="decimal" step="1" value="26"></label>
+          <label class="f"><span>悬浮液浓度 <small>g/L</small></span><input id="slurry" type="number" inputmode="decimal" step="1" value="10"></label>
+        </div>
+        <p class="hint">顶空 = 灌装液位到瓶口盖下沿的空隙。默认按瓶容的 3.5% 估，量一次就固定。<br>
+        <b>悬浮液浓度</b>：干酵母没法称 0.1 g 那么准，所以做成悬浮液按体积打。10 g/L = 1 g 酵母兑 100 mL 水。</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- ============ 正算 ============ -->
+  <section class="panel on" id="panel-forward">
+    <div class="res"><h2>计算结果</h2><table id="outTable"></table></div>
+    <div id="warnings"></div>
+    <div class="actions">
+      <button class="pri" id="btnCalc">重新计算</button>
+      <button id="btnCopy">复制结果</button>
+    </div>
+  </section>
+
+  <!-- ============ 反算 ============ -->
+  <section class="panel" id="panel-reverse">
+    <div class="res"><h2>该补多少</h2><table id="revTable"></table></div>
+    <div id="revWarnings"></div>
+    <div class="actions">
+      <button class="pri" id="btnSolve">重新计算</button>
+      <button id="btnRevCopy">复制结果</button>
+    </div>
+  </section>
+
+  <!-- ============ 酵母库 ============ -->
+  <section class="panel" id="panel-strains">
+    <div class="tip" id="strainMeta"></div>
+    <div id="strainList"></div>
+    <div class="actions"><button id="btnReload">重新加载酵母数据</button></div>
+  </section>
+
+  <!-- ============ 参考 ============ -->
+  <section class="panel" id="panel-ref">
+    <div class="res"><div class="ref" style="padding:14px">
+
+      <h3>这一版怎么算的</h3>
+      <p><b>糖 → 气</b>：1 g 蔗糖 → 0.2618 L CO₂（STP），即 <code>4.04 g/L → 1 体积</code>。</p>
+      <p><b>气 → 压力</b>：亨利定律 + 质量守恒。酒液里的 CO₂ 和顶空里的气体一起平衡：</p>
+      <p><code>总CO₂(STP升) = K(T)/ATM × P_abs × V_酒 + P_abs/ATM × V_顶 × (273.15/T)</code></p>
+      <p><b>亨利常数</b>（纯水，vol/atm）：<code>K(T) = e^(−9.0226 + 2608.6/T)</code></p>
+      <p><b>反算</b>：把上式对 P_abs 解出来，再倒推糖量。</p>
+      <p><b>酒精度增量</b>：1 g/L 蔗糖 → 0.538 g/L 乙醇 → 约 <code>+0.068 %vol</code> 每 g/L 糖。</p>
+
+      <h3>气压 → 瓶塞 / 瓶身（经验区间）</h3>
+      <table style="border:1px solid var(--line);border-radius:8px;overflow:hidden">
+        <tr><th>瓶内压</th><th>建议瓶塞</th><th>瓶身要求</th></tr>
+        <tr><td>≤1.5 bar</td><td>普通软木塞 / 螺旋盖 / 皇冠盖</td><td>耐压瓶即可</td></tr>
+        <tr><td>1.5–4.0 bar</td><td><b>皇冠盖（推荐）/ 摇摆盖</b></td><td>啤酒瓶 / 起泡酒瓶</td></tr>
+        <tr><td>4.0–6.0 bar</td><td><b>香槟塞 + 铁丝（muselet）</b></td><td>香槟瓶 / 起泡酒专用瓶</td></tr>
+        <tr><td>&gt;6.0 bar</td><td>没有常规瓶塞能可靠封住</td><td>超出常规瓶设计范围</td></tr>
+      </table>
+      <p class="hint">参照点（20℃）：2.5 体积 ≈ 1.85 bar · 4 体积 ≈ 3.58 bar · 6 体积（香槟）≈ 5.87 bar。<b>经验区间，非规格书 —— 以瓶厂 / 塞厂规格为准。</b></p>
+
+      <h3>常见风格的目标气压（参照）</h3>
+      <table style="border:1px solid var(--line);border-radius:8px;overflow:hidden">
+        <tr><th>风格</th><th>CO₂ 体积</th><th>20℃ 表压</th></tr>
+        <tr><td>英式艾尔 / 苹果酒（轻微沙口）</td><td>1.8–2.2</td><td>0.9–1.4 bar</td></tr>
+        <tr><td>常规瓶内二发啤酒</td><td>2.4–2.8</td><td>1.7–2.1 bar</td></tr>
+        <tr><td>比利时高碳艾尔</td><td>3.5–4.0</td><td>3.0–3.6 bar</td></tr>
+        <tr><td>起泡苹果酒</td><td>3.0–4.0</td><td>2.4–3.6 bar</td></tr>
+        <tr><td>香槟量级</td><td>5.0–6.0</td><td>4.7–5.9 bar</td></tr>
+      </table>
+
+      <h3>⚠️ 这个工具不能替代什么</h3>
+      <ul>
+        <li><b>酵母数据要核对</b> —— 页面里的参数注明来源，但厂商会改版，用前请对照原始数据表</li>
+        <li><b>瓶子耐压以瓶厂规格为准</b> —— 阈值是经验值</li>
+        <li><b>再发酵风险靠加速试验</b> —— 工具算不出"会不会真发酵"</li>
+        <li><b>法规上限</b>（SO₂、产品类别、标签）本工具不判断</li>
+      </ul>
+
+    </div></div>
+  </section>
+
+  <footer>
+    <b>估算工具 · 结果仅供参考，一切以实测为准。</b><br>
+    酵母参数来自厂商公开资料，已注明来源与抓取日期 · 数据只存本机，不上传。
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ================= 酵母数据 =================
+   ★ 构建时会把这中间替换成 yeast/strains.json 的内容（见 scripts/build-deploy.js）。
+   托管版打开时还会尝试读取同目录的 strains.json 覆盖它，
+   读不到（离线 / file:// / 语法错）就用这里的内置版。 */
+/* === STRAINS:BEGIN === */
+var BUILTIN_STRAINS = [{"id":"lalvin-ec-1118","name":"Lalvin EC-1118","brand":"Lallemand","form":"dry","use":["瓶中二发","起泡基酒","苹果酒"],"alcohol_tolerance_pct":18,"temp_min_c":10,"temp_max_c":30,"inoculation_g_per_l":{"min":0.2,"max":0.4},"inoculation_raw":"0.2-0.4 g/L","inoculation_basis":"primary","rehydration":null,"flocculation":null,"killer_factor":null,"aroma":"中性","nitrogen":null,"note":"厂商原文：『The Original Prise de Mousse，选自著名起泡酒产区，用于起泡基酒及瓶内二次发酵』—— 是这十株里官方明确写了 in-bottle 的一株。⚠️ 行业通识（非厂商数据表）：EC-1118 絮凝性偏低，泥较松散，转瓶和冰塞法除渣会比高絮凝株更费劲。","source_url":"https://www.lallemandbrewing.com/en/united-states/products/lalvin-ec-1118/","fetched_at":"2026-10-13"},{"id":"lalvin-icv-k1-v1116","name":"Lalvin ICV K1-V1116","brand":"Lallemand","form":"dry","use":["瓶中二发","耐高酒精"],"alcohol_tolerance_pct":18,"temp_min_c":10,"temp_max_c":35,"inoculation_g_per_l":{"min":0.2,"max":0.4},"inoculation_raw":"0.2-0.4 g/L","inoculation_basis":"primary","rehydration":null,"flocculation":null,"killer_factor":null,"aroma":"花香酯（香蕉、新鲜红色水果）","nitrogen":null,"note":"温度上限到 35℃，是这十株里最宽的。香气偏果香型 —— 用在苹果酒上会盖掉一部分果味。厂商页面未列絮凝性/杀手因子。","source_url":"https://www.lallemandbrewing.com/en/united-states/products/lalvin-icv-k1-v1116/","fetched_at":"2026-10-13"},{"id":"lalvin-icv-d47","name":"Lalvin ICV D47","brand":"Lallemand","form":"dry","use":["瓶中二发","圆润风格"],"alcohol_tolerance_pct":15,"temp_min_c":15,"temp_max_c":30,"inoculation_g_per_l":{"min":0.2,"max":0.4},"inoculation_raw":"0.2-0.4 g/L","inoculation_basis":"primary","rehydration":null,"flocculation":null,"killer_factor":null,"aroma":"热带水果与白色花香","nitrogen":null,"note":"酒精耐受 15%，是这十株里偏低的 —— 高酒精度苹果酒要留意。香气偏饱满圆润。厂商页面未列絮凝性/杀手因子。","source_url":"https://www.lallemandbrewing.com/en/united-states/products/lalvin-icv-d47/","fetched_at":"2026-10-13"},{"id":"lalvin-qa23","name":"Lalvin QA23","brand":"Lallemand","form":"dry","use":["瓶中二发","果香风格"],"alcohol_tolerance_pct":16,"temp_min_c":14,"temp_max_c":28,"inoculation_g_per_l":{"min":0.2,"max":0.4},"inoculation_raw":"0.2-0.4 g/L","inoculation_basis":"primary","rehydration":null,"flocculation":null,"killer_factor":null,"aroma":"新鲜百香果 / 菠萝","nitrogen":null,"note":"果香最突出的一株，适合做果味向苹果酒；但如果目标是中性起泡风格，它会抢戏。厂商页面未列絮凝性/杀手因子。","source_url":"https://www.lallemandbrewing.com/en/united-states/products/lalvin-qa23/","fetched_at":"2026-10-13"},{"id":"lalvin-71b","name":"Lalvin 71B","brand":"Lallemand","form":"dry","use":["主发酵","降酸"],"alcohol_tolerance_pct":15,"temp_min_c":15,"temp_max_c":30,"inoculation_g_per_l":{"min":0.2,"max":0.4},"inoculation_raw":"0.2-0.4 g/L（厂商 FAQ）","inoculation_basis":"primary","rehydration":null,"flocculation":null,"killer_factor":null,"aroma":"热带水果与香蕉","nitrogen":null,"note":"⚠️ 厂商原文：主发酵期可代谢 20-40% 的苹果酸（会降酸），官方定位是『年轻、新鲜、易饮』的酒，并且明说会『轻易进入苹果酸-乳酸发酵』。瓶中二发要在瓶里放几个月，这株不是为此设计的。本工具保留它只为对照 —— 若你实做效果很好，以你的数据为准。","source_url":"https://www.lallemandbrewing.com/en/united-states/products/lalvin-71b/","fetched_at":"2026-10-13"},{"id":"fermentis-safoeno-spk-05","name":"Fermentis SafŒno SPK 05","brand":"Fermentis","form":"dry","use":["瓶中二发","起泡酒 prise de mousse","香槟/Prosecco/Crémant"],"alcohol_tolerance_pct":15,"temp_min_c":10,"temp_max_c":30,"inoculation_g_per_l":null,"inoculation_raw":"静酒 20 g/hL；『Prise de mousse: specific protocol upon request』","inoculation_basis":null,"rehydration":{"water_multiple":10,"water_temp_min_c":15,"water_temp_max_c":37,"rest_minutes":20,"direct_possible":true,"note":"可直接投放；或倒入 10 倍重量的 15-37℃ 自来水，轻搅防结块，静置 20 分钟。之后可继续驯化：每次加入 1/2 体积的葡萄汁静置 10 分钟，直到与发酵罐温差 <10℃。"},"flocculation":null,"killer_factor":null,"aroma":"中性","nitrogen":"低氮需求（YAN/糖 = 0.7-0.8）","note":"⚠️ 这是十株里唯一官方明确标『Prise de mousse（瓶中二发）』用途的菌株 —— 但厂商把瓶中二发的投量写成『specific protocol upon request』，没有公开数字。页面上的 20 g/hL 是【静酒】用量，不要直接当二发投量。要准确数字请向 Fermentis 索取。低温（14℃）动力学依然快而稳定。","source_url":"https://fermentis.com/en/product/safoeno-spk-05/","fetched_at":"2026-10-13"},{"id":"fermentis-safale-f-2","name":"Fermentis SafAle F-2","brand":"Fermentis","form":"dry","use":["瓶中二发","桶中二发"],"alcohol_tolerance_pct":10,"temp_min_c":15,"temp_max_c":25,"inoculation_g_per_l":{"min":0.02,"max":0.35},"inoculation_raw":"2-35 g/hL at 15-25°C","inoculation_basis":"refermentation","rehydration":{"water_multiple":10,"water_temp_min_c":25,"water_temp_max_c":29,"rest_minutes":null,"direct_possible":false,"note":"厂商明确：『不应直接在啤酒中复水』。要把酵母撒进 ≥10 倍重量的无菌水里，水温 25-29℃，然后再与加过糖的啤酒混合。"},"flocculation":"high","killer_factor":null,"aroma":"中性（不干扰基酒风味）","nitrogen":null,"note":"★ 十株里唯一【专为瓶中/桶中二发设计】且【公开了投量】的一株：2-35 g/hL。厂商还给了配套糖量 5-10 g/L（对应 2.5-5.0 g/L CO₂）。泥沉降均匀（有利除渣）。⚠️ 但酒精耐受 <10% vol —— 酒精度高的苹果酒要当心。15℃ 以下碳酸化可能要 2 周以上。","source_url":"https://fermentis.com/en/product/safale-f-2/","fetched_at":"2026-10-13"},{"id":"fermentis-safcider-tf-6","name":"Fermentis SafCider TF-6","brand":"Fermentis","form":"dry","use":["苹果酒","主发酵","高比重"],"alcohol_tolerance_pct":null,"temp_min_c":10,"temp_max_c":30,"inoculation_g_per_l":null,"inoculation_raw":"20-40 g/hL（first fermentation）","inoculation_basis":null,"rehydration":{"water_multiple":10,"water_temp_min_c":null,"water_temp_max_c":null,"rest_minutes":20,"direct_possible":true,"note":"① 直接投放：撒在 ≥10 倍重量的果汁表面。② 先复水：撒进 10 倍重量的【室温】自来水，轻搅防结块，静置 20 分钟，再泵入罐中（带充气）。"},"flocculation":null,"killer_factor":true,"aroma":"中性","nitrogen":"高氮需求（YAN/糖 >0.9）","note":"苹果酒专用、带杀伤因子，对果糖同化好，适合高比重苹果汁。⚠️ 厂商给 20-40 g/hL 时写的是『for first fermentation』（主发酵），**没有给瓶中二发投量** —— 别直接套用。理想的发酵温度是 15-25℃。","source_url":"https://fermentis.com/en/product/safcider-tf-6/","fetched_at":"2026-10-13"},{"id":"wyeast-4021","name":"Wyeast 4021 Dry White / Sparkling","brand":"Wyeast","form":"liquid","use":["瓶中二发","起泡酒"],"alcohol_tolerance_pct":17,"temp_min_c":13,"temp_max_c":24,"inoculation_g_per_l":null,"inoculation_raw":"液体酵母，厂商未给 g/L 投量","inoculation_basis":null,"rehydration":null,"flocculation":"medium","killer_factor":null,"aroma":"中性","nitrogen":null,"note":"液体酵母（不是干粉），无复水问题，但需要按厂商建议做活化或扩培。酒精耐受 17%，絮凝性中等 —— 除渣比低絮凝株容易。","source_url":"https://wyeastlab.com/product/dry-whitesparkling/","fetched_at":"2026-10-13"},{"id":"wyeast-4766","name":"Wyeast 4766 Cider","brand":"Wyeast","form":"liquid","use":["苹果酒","瓶中二发"],"alcohol_tolerance_pct":12,"temp_min_c":16,"temp_max_c":24,"inoculation_g_per_l":null,"inoculation_raw":"液体酵母，厂商未给 g/L 投量","inoculation_basis":null,"rehydration":null,"flocculation":"low","killer_factor":null,"aroma":"苹果酒典型","nitrogen":null,"note":"苹果酒专用液体酵母。⚠️ 絮凝性【低】→ 泥不容易聚成紧实的塞，转瓶要多走几天，冰塞法除渣更易残留。酒精耐受 12%，偏高酒精度的苹果酒要当心。","source_url":"https://wyeastlab.com/product/cider/","fetched_at":"2026-10-13"}];
+var BUILTIN_META = {"fetched_at":"2026-10-13","count":10};
+var BUILTIN_GENERIC_RATE = {"min":0.05,"max":0.1};
+/* === STRAINS:END === */
+
+var STRAINS = BUILTIN_STRAINS.slice();
+var STRAIN_SOURCE = 'builtin';   // builtin | remote
+
+/* ================= 常量与公式 ================= */
+var ATM = 1.01325;
+var ETHANOL_DENSITY = 0.789;       // g/mL
+
+/* ---------- 糖的种类 ----------
+   同样重量，不同糖产气量不同 —— 差 10% 以上，必须分开算。
+   蔗糖 C12H22O11 (342.30)：+H2O → 4 乙醇 + 4 CO2 → 4×22.414/342.30 = 0.2619 L/g
+   葡萄糖 C6H12O6 (180.16)：→ 2 乙醇 + 2 CO2    → 2×22.414/180.16 = 0.2488 L/g
+   一水葡萄糖 C6H12O6·H2O (198.17)：            → 2×22.414/198.17 = 0.2262 L/g
+   （CO2 体积均按 STP 22.414 L/mol）
+   换算：1 体积 CO2 需要 蔗糖 3.82 / 无水葡萄糖 4.02 / 一水葡萄糖 4.42 g/L
+   ⚠️ 流传的「4 g/L 换 1 体积」是【葡萄糖】的数，别套到蔗糖上。 */
+var SUGAR_TYPES = [
+  { id:'sucrose',  name:'蔗糖（白砂糖）',   co2PerG:0.2619, perVol:3.818 },
+  { id:'glucose',  name:'葡萄糖（无水）',   co2PerG:0.2488, perVol:4.019 },
+  { id:'dextrose', name:'葡萄糖（一水）',   co2PerG:0.2262, perVol:4.421 }
+];
+function sugarById(id){
+  for(var i=0;i<SUGAR_TYPES.length;i++) if(SUGAR_TYPES[i].id===id) return SUGAR_TYPES[i];
+  return SUGAR_TYPES[0];
+}
+
+/* ---------- CO2 在水中的溶解度（Bunsen 系数，vol CO2 / vol 水 / atm） ----------
+   标准表。0–30℃ 用【对数线性插值】—— 锚点上精确。
+   踩过：一开始只用指数拟合 exp(a+b/T)，在 0℃ 偏低 1.1%、10℃ 偏高 1.3%。
+   区间外用端点斜率指数外推（属于外推，不是实测）。 */
+var K_TABLE = [[0,1.713],[5,1.424],[10,1.194],[15,1.019],[20,0.878],[25,0.759],[30,0.665]];
+function henryK(tc){
+  var n=K_TABLE.length;
+  if(tc <= K_TABLE[0][0]){
+    var s0=Math.log(K_TABLE[1][1]/K_TABLE[0][1])/(K_TABLE[1][0]-K_TABLE[0][0]);
+    return K_TABLE[0][1]*Math.exp(s0*(tc-K_TABLE[0][0]));
+  }
+  if(tc >= K_TABLE[n-1][0]){
+    var s1=Math.log(K_TABLE[n-1][1]/K_TABLE[n-2][1])/(K_TABLE[n-1][0]-K_TABLE[n-2][0]);
+    return K_TABLE[n-1][1]*Math.exp(s1*(tc-K_TABLE[n-1][0]));
+  }
+  for(var i=0;i<n-1;i++){
+    var a=K_TABLE[i], b=K_TABLE[i+1];
+    if(tc>=a[0] && tc<=b[0]){
+      var t=(tc-a[0])/(b[0]-a[0]);
+      return Math.exp(Math.log(a[1])*(1-t)+Math.log(b[1])*t);
+    }
+  }
+  return K_TABLE[n-1][1];
+}
+function hplus(pH){ return Math.pow(10,-pH); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function num(id){ var e=document.getElementById(id); if(!e) return null; var v=parseFloat(e.value); return isNaN(v)?null:v; }
+function f(v,d){ return (v===null||v===undefined||!isFinite(v)) ? '—' : v.toFixed(d===undefined?2:d); }
+
+/* 平衡绝对压力（bar）。totalSTP = 瓶中总 CO2（STP 升） */
+function eqP(totalSTP, vLiqL, vHeadL, tc){
+  var T=tc+273.15, K=henryK(tc);
+  var a = K*vLiqL/ATM + (vHeadL/ATM)*(273.15/T);
+  return a>0 ? totalSTP/a : 0;
+}
+/* 反解：给定目标表压，求需要的酒液内 CO2 体积数 */
+function co2VolForPressure(pGauge, vLiqL, vHeadL, tc){
+  var T=tc+273.15, K=henryK(tc);
+  var a = K*vLiqL/ATM + (vHeadL/ATM)*(273.15/T);
+  var totalSTP = a * (pGauge + ATM);
+  return totalSTP / vLiqL;
+}
+function sugarToCO2Vol(g, st){ return g * (st||SUGAR_TYPES[0]).co2PerG; }
+function co2VolToSugar(v, st){ return v / (st||SUGAR_TYPES[0]).co2PerG; }
+function abvIncrease(g){ return g * 0.538 / ETHANOL_DENSITY / 10; }   // %vol，按蔗糖计，差异可忽略
+
+/* ================= 瓶塞分档（与 dosage-calc 同口径） ================= */
+var CLOSURE_TIERS = [
+  { id:'still',     max:1.5,      closure:'普通软木塞 / 螺旋盖 / 皇冠盖', bottle:'耐压瓶即可' },
+  { id:'crown',     max:4.0,      closure:'皇冠盖（推荐）/ 摇摆盖',       bottle:'啤酒瓶 / 起泡酒瓶' },
+  { id:'champagne', max:6.0,      closure:'香槟塞 + 铁丝（muselet）',    bottle:'香槟瓶 / 起泡酒专用瓶' },
+  { id:'none',      max:Infinity, closure:'没有常规瓶塞能可靠封住',       bottle:'超出常规瓶设计范围' }
+];
+function closureFor(bar){
+  if(bar===null||bar===undefined||isNaN(bar)) return null;
+  for(var i=0;i<CLOSURE_TIERS.length;i++) if(bar<=CLOSURE_TIERS[i].max) return CLOSURE_TIERS[i];
+  return CLOSURE_TIERS[CLOSURE_TIERS.length-1];
+}
+
+/* ================= 状态 ================= */
+var state = { bottle:750, tab:'forward' };
+
+function findStrain(id){
+  for(var i=0;i<STRAINS.length;i++) if(STRAINS[i].id===id) return STRAINS[i];
+  return null;
+}
+function currentStrain(){ return findStrain(document.getElementById('strain').value); }
+function currentSugarType(){
+  var e=document.getElementById('sugarType');
+  return sugarById(e ? e.value : 'sucrose');
+}
+
+/* 接种量：取区间中值；只有单值时直接用。纯取值，不判断用途。 */
+function inocMid(s){
+  if(!s || !s.inoculation_g_per_l) return null;
+  var v=s.inoculation_g_per_l;
+  if(typeof v === 'number') return v;
+  if(v.min!=null && v.max!=null) return (v.min+v.max)/2;
+  return (v.min!=null? v.min : v.max);
+}
+
+/* 通用瓶中二发投量（行业通识，非某一株的数据表值）
+   依据：目标 10^6 cells/mL ÷ 干酵母 ≥1×10^10 cfu/g = 0.1 g/L（Fermentis F-2 页面载明该活菌数）。
+   会被 strains.json 里的 generic_referment_rate_g_per_l 覆盖。 */
+var GENERIC_RATE = { min:0.05, max:0.1 };
+var GENERIC_BASIS = '按 10^6 cells/mL ÷ 干酵母 ≥1×10^10 cfu/g 推算';
+/* 构建时把 strains.json 里的通用值注入进来（单文件离线版也能用对） */
+if(BUILTIN_GENERIC_RATE && BUILTIN_GENERIC_RATE.min!=null){ GENERIC_RATE = BUILTIN_GENERIC_RATE; }
+
+/* 计算器【实际该用】的投量 —— 关键是区分「厂商数据」和「通用值」
+   ⚠️ 厂商给的 0.2-0.4 g/L 多半是【主发酵】投量，瓶中二发通常要低得多。
+      直接套用会投过头，所以只在 inoculation_basis === 'refermentation' 时才采信。 */
+function inocEffective(s){
+  if(!s) return { value:null, source:null, label:'—' };
+  var basis = s.inoculation_basis;
+  if(basis === 'refermentation'){
+    var m = inocMid(s);
+    if(m!=null) return { value:m, source:'datasheet', label:'厂商数据表（瓶中二发）', raw:s.inoculation_raw };
+  }
+  if(s.form === 'dry' && GENERIC_RATE){
+    return {
+      value:(GENERIC_RATE.min+GENERIC_RATE.max)/2,
+      min:GENERIC_RATE.min, max:GENERIC_RATE.max,
+      source:'generic',
+      label:'通用值 '+GENERIC_RATE.min+'–'+GENERIC_RATE.max+' g/L（行业通识）',
+      raw:s.inoculation_raw || null,
+      why: (basis==='primary')
+        ? '厂商给的 '+ (s.inoculation_raw||'该值') +' 是【主发酵】投量，瓶中二发通常要低得多，所以这里没用它。'
+        : '厂商没有公布瓶中二发投量，用通用值。'
+    };
+  }
+  return { value:null, source:null, label:'—',
+    why: (s.form==='liquid') ? '液体酵母，厂商未给 g/L 投量，请按其活化/扩培建议操作。'
+                             : '这株没有可用的投量数据。' };
+}
+
+/* ================= 计算 ================= */
+function compute(){
+  var strain = currentStrain();
+  var bottle = state.bottle;
+  var head = num('head'); if(head===null) head = Math.round(bottle*0.035);
+  var tc = num('tempC'); if(tc===null) tc = 20;
+  var baseAbv = num('baseAbv'); if(baseAbv===null) baseAbv = 0;
+  var baseSugar = num('baseSugar'); if(baseSugar===null) baseSugar = 0;
+  var sugar = num('sugar'); if(sugar===null) sugar = 0;
+  var bottles = num('bottles'); if(bottles===null) bottles = 1;
+  var slurry = num('slurry'); if(slurry===null) slurry = 10;
+  var stype = currentSugarType();
+
+  var vLiqL = bottle/1000, vHeadL = head/1000;
+
+  // 产气 = 补糖 + 基酒残糖
+  var totalSugar = sugar + baseSugar;
+  var co2Vol = sugarToCO2Vol(totalSugar, stype);
+  var totalSTP = co2Vol * vLiqL;
+  var pAbs = eqP(totalSTP, vLiqL, vHeadL, tc);
+  var pGauge = pAbs - ATM;
+
+  var abvAfter = baseAbv + abvIncrease(totalSugar);
+  var closure = closureFor(pGauge);
+
+  // 酵母投量
+  var ii = inocEffective(strain);
+  var inoc = ii.value;
+  var yeastPerBottle = (inoc!=null) ? inoc * vLiqL : null;            // g/瓶
+  var slurryPerBottle = (yeastPerBottle!=null && slurry>0) ? yeastPerBottle/slurry*1000 : null;  // mL/瓶
+  var totalSlurry = (slurryPerBottle!=null) ? slurryPerBottle*bottles : null;                     // mL
+  var totalYeast = (totalSlurry!=null) ? totalSlurry/1000*slurry : null;                          // g
+
+  return {
+    strain:strain, bottle:bottle, head:head, tc:tc, baseAbv:baseAbv, baseSugar:baseSugar,
+    sugar:sugar, bottles:bottles, slurry:slurry, stype:stype,
+    vLiqL:vLiqL, vHeadL:vHeadL, totalSugar:totalSugar, co2Vol:co2Vol,
+    pGauge:pGauge, pAbs:pAbs, abvAfter:abvAfter, closure:closure,
+    inoc:inoc, inocInfo:ii, yeastPerBottle:yeastPerBottle, slurryPerBottle:slurryPerBottle,
+    totalSlurry:totalSlurry, totalYeast:totalYeast,
+    totalSugarMass: totalSugar * (bottle/1000) * bottles,
+  };
+}
+
+/* ================= 预警 ================= */
+function warnings(r){
+  var w=[];
+  function add(sev,t,m){ w.push({sev:sev,t:t,m:m}); }
+  var s=r.strain;
+
+  // 瓶塞 / 瓶身
+  if(r.pGauge > 6.0) add('danger','瓶内压 '+f(r.pGauge,2)+' bar 过高',
+    '超过「'+r.closure.closure+'」档。常规瓶塞和常规瓶都扛不住，必须先降糖。');
+  else if(r.pGauge > 4.0) add('warn','瓶内压 '+f(r.pGauge,2)+' bar 偏高',
+    '这个压力必须用「香槟塞 + 铁丝」和香槟瓶/起泡酒专用瓶。瓶塞瓶身以厂方规格为准。');
+
+  // 酵母酒精耐受
+  if(s && s.alcohol_tolerance_pct!=null){
+    if(r.abvAfter > s.alcohol_tolerance_pct)
+      add('danger','超出酵母酒精耐受',
+        s.name+' 官方耐受 '+s.alcohol_tolerance_pct+'%vol，你算出来成品约 '+f(r.abvAfter,2)+
+        '%vol。<b>可能发不完 → 气压达不到预期</b>，甚至留甜引发后续再发酵。');
+    else if(r.abvAfter > s.alcohol_tolerance_pct - 1)
+      add('warn','逼近酵母酒精耐受',
+        '成品约 '+f(r.abvAfter,2)+'%vol，酵母耐受 '+s.alcohol_tolerance_pct+'%vol，余量不到 1 个百分点。风险偏高。');
+  } else if(s){
+    add('info','这株没有酒精耐受数据','无法校验耐受。以厂商数据表为准。');
+  }
+
+  // 温度
+  if(s && s.temp_min_c!=null && s.temp_max_c!=null){
+    if(r.tc < s.temp_min_c || r.tc > s.temp_max_c)
+      add('danger','温度超出酵母工作范围',
+        '当前 '+r.tc+'℃，'+s.name+' 官方范围 '+s.temp_min_c+'–'+s.temp_max_c+'℃。<b>发酵会变慢或停住。</b>');
+    else if(r.tc < s.temp_min_c+2 || r.tc > s.temp_max_c-2)
+      add('warn','温度贴近酵母工作范围边界',
+        '当前 '+r.tc+'℃，官方范围 '+s.temp_min_c+'–'+s.temp_max_c+'℃。建议往中间靠。');
+  }
+
+  // 残糖没算
+  if(r.baseSugar > 0)
+    add('info','基酒残糖已计入产气',
+      '按 '+f(r.baseSugar,1)+' g/L 全部再发酵算的。如果它在瓶里不会发，实际压力会低一些；'+
+      '反过来如果残糖还会继续变，压力会更高。');
+
+  // 酵母投量来源
+  if(r.inocInfo && r.inocInfo.source==='generic')
+    add('info','酵母投量用的是通用值',
+      (r.inocInfo.why? r.inocInfo.why+'<br>' : '') + r.inocInfo.label +
+      '。依据：'+GENERIC_BASIS+'。<b>建议向厂商索取该株的瓶中二发投量后替换。</b>');
+  if(r.inocInfo && r.inocInfo.source===null && r.strain)
+    add('warn','这株没有可用的投量数据',
+      (r.inocInfo.why||'') + ' 本工具算不出每瓶要打多少酵母。');
+
+  // 絮凝性 → 除渣难度
+  if(s && /low/i.test(s.flocculation||''))
+    add('warn','这株絮凝性低，除渣会更难',
+      s.name+' 絮凝性低 → 泥不容易聚成紧实的塞。<b>转瓶要多走几天，冰塞法除渣时更容易残留。</b>');
+
+  // 悬浮液体积占比
+  if(r.slurryPerBottle!=null && r.vLiqL>0){
+    var share = (r.slurryPerBottle/1000) / r.vLiqL;
+    if(share > 0.03) add('warn','悬浮液体积偏大（占 '+f(share*100,1)+'%）',
+      '每瓶要注入 '+f(r.slurryPerBottle,1)+' mL，会把酒稀释。提高悬浮液浓度（比如 20 g/L）可以减半。');
+  }
+
+  if(r.sugar<=0 && r.baseSugar<=0)
+    add('warn','没有可发酵的糖','补糖量和基酒残糖都是 0，不会产气。');
+
+  if(w.length===0) add('ok','未触发预警','当前参数没有命中风险规则。但这不等于安全 —— 再发酵风险只能靠加速试验判定。');
+  return w;
+}
+
+/* ================= 渲染 ================= */
+var SEP=['—'];
+function renderForward(){
+  var r=compute();
+  var rows=[
+    ['瓶型 / 批量', (r.bottle>=1500?'1.5 L':r.bottle+' ml')+' × '+r.bottles, '瓶'],
+    ['酒液 / 顶空', f(r.vLiqL*1000,0)+' / '+f(r.head,0), 'ml'],
+    SEP,
+    ['糖的种类', r.stype.name, '', '1 体积 CO₂ 需 '+f(r.stype.perVol,2)+' g/L'],
+    ['计入的总糖', f(r.totalSugar,1), 'g/L', r.baseSugar>0?'含基酒残糖 '+f(r.baseSugar,1)+' g/L':'' ],
+    ['产生 CO₂', f(r.co2Vol,2), '体积'],
+    ['瓶内压', f(r.pGauge,2), 'bar', '估算，含纯水系数偏差，实际略低'],
+    ['成品酒精度', f(r.abvAfter,2), '%vol', '基酒 '+f(r.baseAbv,1)+'% + 再发酵 '+f(abvIncrease(r.totalSugar),2)+'%'],
+    SEP,
+    ['适配瓶塞', r.closure?r.closure.closure:'—','','按当前压力','txt'],
+    ['适配瓶身', r.closure?r.closure.bottle:'—','','瓶身耐压以瓶厂规格为准','txt'],
+    SEP,
+    ['酵母接种量', r.inoc!=null?f(r.inoc,3):'—', 'g/L',
+       r.inocInfo? r.inocInfo.label : ''],
+    ['每瓶需酵母', r.yeastPerBottle!=null?f(r.yeastPerBottle,3):'—', 'g', r.yeastPerBottle!=null&&r.yeastPerBottle<0.05?'太少，称不出来 —— 必须做悬浮液':''],
+    ['每瓶注入悬浮液', r.slurryPerBottle!=null?f(r.slurryPerBottle,2):'—', 'ml', '浓度 '+f(r.slurry,1)+' g/L'],
+    ['整批需悬浮液', r.totalSlurry!=null?f(r.totalSlurry,0):'—', 'ml', ''],
+    ['整批需干酵母', r.totalYeast!=null?f(r.totalYeast,2):'—', 'g', '']
+  ];
+  var html='';
+  for(var i=0;i<rows.length;i++){
+    var row=rows[i];
+    if(row.length===1){ html+='<tr><td colspan="2" class="sep">· · ·</td></tr>'; continue; }
+    var big=(row[0]==='瓶内压'||row[0]==='补糖量'||row[0]==='产生 CO₂');
+    var cls=row[4]==='txt'?'txt':(big?'big':'');
+    html+='<tr><th>'+row[0]+(row[3]?'<span class="note">'+row[3]+'</span>':'')+'</th>'+
+          '<td class="'+cls+'">'+row[1]+(row[2]?'<span class="u">'+row[2]+'</span>':'')+'</td></tr>';
+  }
+  document.getElementById('outTable').innerHTML=html;
+  document.getElementById('warnings').innerHTML=warnings(r).map(function(x){
+    return '<div class="warn w-'+x.sev+'"><b>'+x.t+'</b>'+x.m+'</div>';
+  }).join('');
+}
+
+function renderReverse(){
+  var strain = currentStrain();
+  var bottle = state.bottle;
+  var head = num('head'); if(head===null) head = Math.round(bottle*0.035);
+  var tc = num('tempC'); if(tc===null) tc = 20;
+  var baseAbv = num('baseAbv'); if(baseAbv===null) baseAbv = 0;
+  var baseSugar = num('baseSugar'); if(baseSugar===null) baseSugar = 0;
+  var targetP = num('targetP'); if(targetP===null) targetP = 3.5;
+  var bottles = num('bottles'); if(bottles===null) bottles = 1;
+  var slurry = num('slurry'); if(slurry===null) slurry = 10;
+  var stype = currentSugarType();
+
+  var vLiqL=bottle/1000, vHeadL=head/1000;
+  var needVol = co2VolForPressure(targetP, vLiqL, vHeadL, tc);   // 需要的酒液内 CO2 体积数
+  var sugarNeeded = co2VolToSugar(needVol, stype) - baseSugar;   // 扣掉基酒残糖
+  var sugarPerBottle = sugarNeeded * vLiqL;
+  var ii = inocEffective(strain);
+  var inoc = ii.value;
+  var yeastPerBottle = (inoc!=null) ? inoc*vLiqL : null;
+  var slurryPerBottle = (yeastPerBottle!=null && slurry>0) ? yeastPerBottle/slurry*1000 : null;
+  var totalSlurry = slurryPerBottle!=null ? slurryPerBottle*bottles : null;
+  var totalYeast = totalSlurry!=null ? totalSlurry/1000*slurry : null;
+  var rh = strain && strain.rehydration ? strain.rehydration : null;
+  var totalSugarMass = sugarPerBottle*bottles;
+  var abvAfter = baseAbv + abvIncrease(sugarNeeded>0?sugarNeeded:0);
+  var closure = closureFor(targetP);
+
+  var rows=[
+    ['目标瓶内压', f(targetP,2), 'bar'],
+    ['等效 CO₂', f(needVol,2), '体积'],
+    ['瓶型 / 批量', (bottle>=1500?'1.5 L':bottle+' ml')+' × '+bottles, '瓶'],
+    SEP,
+    ['需补糖量', sugarNeeded>0?f(sugarNeeded,1):'0（基酒残糖已够）', 'g/L', '已扣掉基酒残糖 '+f(baseSugar,1)+' g/L'],
+    ['每瓶补糖', sugarNeeded>0?f(sugarPerBottle,2):'0', 'g', ''],
+    ['整批补糖', sugarNeeded>0?f(totalSugarMass,0):'0', 'g', ''],
+    SEP,
+    ['酵母', strain?strain.name:'—','','', 'txt'],
+    ['接种量', inoc!=null?f(inoc,3):'—', 'g/L', ii? ii.label : '' ],
+    ['每瓶需酵母', yeastPerBottle!=null?f(yeastPerBottle,3):'—', 'g', yeastPerBottle!=null&&yeastPerBottle<0.05?'太少称不出来':''],
+    ['每瓶注入悬浮液', slurryPerBottle!=null?f(slurryPerBottle,2):'—', 'ml', '浓度 '+f(slurry,1)+' g/L'],
+    ['整批需悬浮液', totalSlurry!=null?f(totalSlurry,0):'—', 'ml', ''],
+    ['整批需干酵母', totalYeast!=null?f(totalYeast,2):'—', 'g', ''],
+    SEP,
+    ['成品酒精度', f(abvAfter,2), '%vol', '基酒 '+f(baseAbv,1)+'% + 再发酵'],
+    ['适配瓶塞', closure?closure.closure:'—','','','txt']
+  ];
+  if(rh && totalYeast!=null){
+    if(rh.water_multiple!=null)
+      rows.splice(rows.length-2,0,
+        ['复水用水量', f(totalYeast*rh.water_multiple,0), 'ml', '酵母重 ×'+rh.water_multiple],
+        ['复水水温', (rh.water_temp_min_c!=null? rh.water_temp_min_c+'–'+rh.water_temp_max_c+' ℃' : '见厂商说明'), '', '', 'txt']);
+    else
+      rows.splice(rows.length-2,0,
+        ['复水参数', '见厂商说明', '', rh.note||'该株官方页面未单列复水数据', 'txt']);
+  }
+
+  var html='';
+  for(var i=0;i<rows.length;i++){
+    var row=rows[i];
+    if(row.length===1){ html+='<tr><td colspan="2" class="sep">· · ·</td></tr>'; continue; }
+    var big=(row[0]==='需补糖量'||row[0]==='目标瓶内压');
+    var cls=row[4]==='txt'?'txt':(big?'big':'');
+    html+='<tr><th>'+row[0]+(row[3]?'<span class="note">'+row[3]+'</span>':'')+'</th>'+
+          '<td class="'+cls+'">'+row[1]+(row[2]?'<span class="u">'+row[2]+'</span>':'')+'</td></tr>';
+  }
+  document.getElementById('revTable').innerHTML=html;
+
+  // 复用正向的预警逻辑
+  var fake = {
+    strain:strain, bottle:bottle, head:head, tc:tc, baseAbv:baseAbv, baseSugar:baseSugar,
+    sugar:sugarNeeded>0?sugarNeeded:0, bottles:bottles, slurry:slurry, stype:stype,
+    vLiqL:vLiqL, vHeadL:vHeadL, totalSugar:sugarNeeded>0?sugarNeeded:0,
+    co2Vol:needVol, pGauge:targetP, closure:closure, abvAfter:abvAfter,
+    slurryPerBottle:slurryPerBottle
+  };
+  document.getElementById('revWarnings').innerHTML=warnings(fake).map(function(x){
+    return '<div class="warn w-'+x.sev+'"><b>'+x.t+'</b>'+x.m+'</div>';
+  }).join('');
+}
+
+/* ================= 酵母库 ================= */
+function renderStrains(){
+  var meta=document.getElementById('strainMeta');
+  meta.innerHTML='当前共 <b>'+STRAINS.length+'</b> 株 · 数据来源：'+
+    (STRAIN_SOURCE==='remote'?'<b>外部 strains.json（最新）</b>':'<b>内置版</b>')+
+    (BUILTIN_META.fetched_at? ' · 抓取日期 '+BUILTIN_META.fetched_at : '');
+  var html='';
+  if(!STRAINS.length){ html='<div class="warn w-warn"><b>酵母数据是空的</b>请检查 strains.json。</div>'; }
+  STRAINS.forEach(function(s){
+    var tags=[];
+    if(s.form) tags.push(s.form==='dry'?'干酵母':'液体酵母');
+    if(s.killer_factor) tags.push('杀手因子');
+    if(s.use) s.use.forEach(function(u){ tags.push(u); });
+    html+='<div class="strain"><h4>'+s.name+' <span class="meta">'+s.brand+'</span></h4>'+
+      '<div class="meta">'+
+      '<span class="tag">'+tags.join('</span><span class="tag">')+'</span><br>'+
+      '酒精耐受 '+(s.alcohol_tolerance_pct!=null?s.alcohol_tolerance_pct+'%':'—')+
+      ' · 温度 '+(s.temp_min_c!=null?s.temp_min_c+'–'+s.temp_max_c+'℃':'—')+
+      ' · 接种 '+(s.inoculation_g_per_l?
+          (typeof s.inoculation_g_per_l==='number'? s.inoculation_g_per_l :
+           (s.inoculation_g_per_l.min+'–'+s.inoculation_g_per_l.max))+' g/L'+
+           (s.inoculation_basis==='primary'?'（主发酵）':(s.inoculation_basis==='refermentation'?'（瓶中二发）':''))
+          :'—')+
+      ' · 絮凝 '+(s.flocculation||'—')+
+      (s.aroma?' · '+s.aroma:'')+
+      '</div>'+
+      (s.note?'<div class="flag">⚠️ '+s.note+'</div>':'')+
+      '<div class="src">来源 '+(s.source_url||'—')+(s.fetched_at?'（抓取于 '+s.fetched_at+'）':'')+'</div>'+
+    '</div>';
+  });
+  document.getElementById('strainList').innerHTML=html;
+}
+
+function fillStrainSelect(){
+  var sel=document.getElementById('strain');
+  var keep=sel.value;
+  sel.innerHTML=STRAINS.map(function(s){
+    return '<option value="'+s.id+'">'+s.name+' · '+s.brand+'</option>';
+  }).join('');
+  if(keep && findStrain(keep)) sel.value=keep;
+}
+
+/* ================= 数据校验与外部加载 ================= */
+function validateStrains(list){
+  var errs=[];
+  if(!Array.isArray(list)) return ['顶层不是数组'];
+  if(!list.length) return ['数组是空的'];
+  var seen={};
+  list.forEach(function(s,i){
+    var at='第 '+(i+1)+' 条'+(s&&s.name?'（'+s.name+'）':'');
+    if(!s || typeof s!=='object'){ errs.push(at+'：不是对象'); return; }
+    if(!s.id) errs.push(at+'：缺 id');
+    else if(seen[s.id]) errs.push(at+'：id 重复（'+s.id+'）');
+    else seen[s.id]=1;
+    if(!s.name) errs.push(at+'：缺 name');
+    if(s.alcohol_tolerance_pct!=null && typeof s.alcohol_tolerance_pct!=='number')
+      errs.push(at+'：alcohol_tolerance_pct 不是数字');
+    ['temp_min_c','temp_max_c'].forEach(function(k){
+      if(s[k]!=null && typeof s[k]!=='number') errs.push(at+'：'+k+' 不是数字');
+    });
+    if(s.temp_min_c!=null && s.temp_max_c!=null && s.temp_min_c>s.temp_max_c)
+      errs.push(at+'：温度上下限写反了');
+    var v=s.inoculation_g_per_l;
+    if(v!=null){
+      if(typeof v==='number'){ if(!(v>0)) errs.push(at+'：inoculation_g_per_l 必须 >0'); }
+      else if(typeof v==='object'){
+        if(v.min==null&&v.max==null) errs.push(at+'：inoculation_g_per_l 是空的');
+        else [v.min,v.max].forEach(function(x){ if(x!=null && typeof x!=='number') errs.push(at+'：inoculation_g_per_l 里有非数字'); });
+      } else errs.push(at+'：inoculation_g_per_l 格式不对');
+    }
+  });
+  return errs;
+}
+
+function showDataWarn(title, detail){
+  var el=document.getElementById('dataWarn');
+  el.style.display='block';
+  el.innerHTML='<div class="warn w-danger"><b>'+title+'</b>'+detail+'</div>';
+}
+
+function applyStrains(list, source){
+  STRAINS=list; STRAIN_SOURCE=source;
+  fillStrainSelect(); renderStrains();
+  if(state.tab==='forward') renderForward();
+  if(state.tab==='reverse') renderReverse();
+}
+
+function loadRemote(){
+  // 托管版读同目录的 strains.json；file:// 或断网会失败 → 用内置版
+  if(typeof fetch!=='function') return;
+  fetch('strains.json', {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+    .then(function(j){
+      var list = Array.isArray(j) ? j : (j.strains||[]);
+      var errs = validateStrains(list);
+      if(errs.length){
+        showDataWarn('strains.json 有 '+errs.length+' 处问题，已回退到内置数据',
+          '<br>· '+errs.slice(0,6).join('<br>· ')+(errs.length>6?'<br>· …还有 '+(errs.length-6)+' 处':'')+
+          '<br><br>修好并提交后刷新本页即可。');
+        return;
+      }
+      if(j && j.generic_referment_rate_g_per_l){ GENERIC_RATE = j.generic_referment_rate_g_per_l; }
+      if(j && j.generic_rate_basis){ GENERIC_BASIS = j.generic_rate_basis; }
+      BUILTIN_META = { fetched_at: (j&&j.fetched_at)||null, count:list.length };
+      applyStrains(list,'remote');
+    })
+    .catch(function(e){
+      // 离线 / file:// / 没有这个文件 —— 静默用内置版，但状态栏会标出来
+      if(STRAINS.length===0){
+        showDataWarn('酵母数据没加载成功','内置数据是空的，外部 strains.json 也读不到（'+(e&&e.message)+'）。');
+      }
+    });
+}
+
+/* ================= 交互 ================= */
+function switchTab(name){
+  state.tab=name;
+  document.querySelectorAll('nav button').forEach(function(b){ b.classList.toggle('on', b.dataset.tab===name); });
+  ['forward','reverse','strains','ref'].forEach(function(t){
+    document.getElementById('panel-'+t).classList.toggle('on', t===name);
+  });
+  var showInput = (name==='forward'||name==='reverse');
+  document.getElementById('inputArea').style.display = showInput?'block':'none';
+  document.getElementById('firstNotice').style.display =
+    (dismissed()||name==='ref'||name==='strains')?'none':'block';
+
+  // 正算只显示补糖量，反算只显示目标压力
+  document.getElementById('wrapSugar').style.display    = (name==='forward')?'block':'none';
+  document.getElementById('wrapPressure').style.display = (name==='reverse')?'block':'none';
+  document.getElementById('modeHint').innerHTML = (name==='forward')
+    ? '正算：给补糖量，算瓶内压和酵母用量。'
+    : '反算：给目标瓶内压，倒推要补多少糖、多少酵母。';
+
+  if(name==='forward') renderForward();
+  if(name==='reverse') renderReverse();
+  if(name==='strains') renderStrains();
+}
+
+var NOTICE_KEY='oldapple-tirage-notice';
+function dismissed(){ try{ return localStorage.getItem(NOTICE_KEY)==='1'; }catch(e){ return false; } }
+
+function toast(msg){
+  var d=document.createElement('div');
+  d.textContent=msg;
+  d.style.cssText='position:fixed;left:50%;bottom:40px;transform:translateX(-50%);background:#1B4B72;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;z-index:99';
+  document.body.appendChild(d); setTimeout(function(){ d.remove(); },1500);
+}
+
+function summaryText(r, isRev){
+  var L=[];
+  if(isRev){
+    L.push('【瓶内二次发酵 · 反算】');
+    L.push('目标瓶内压 '+f(r.pGauge,2)+' bar ≈ '+f(r.co2Vol,2)+' 体积 CO₂');
+    L.push('需补糖 '+f(r.sugar,1)+' g/L，每瓶 '+f(r.sugar*r.vLiqL,2)+' g');
+  } else {
+    L.push('【瓶内二次发酵 · 正算】');
+    L.push('补糖 '+f(r.totalSugar,1)+' g/L → '+f(r.co2Vol,2)+' 体积 CO₂');
+    L.push('瓶内压 '+f(r.pGauge,2)+' bar');
+  }
+  L.push('瓶型 '+r.bottle+' ml × '+r.bottles+' 瓶，酒温 '+r.tc+'℃');
+  L.push('酵母 '+(r.strain?r.strain.name:'—'));
+  if(r.yeastPerBottle!=null){
+    L.push('每瓶酵母 '+f(r.yeastPerBottle,3)+' g → 悬浮液('+f(r.slurry,1)+' g/L) '+f(r.slurryPerBottle,2)+' mL/瓶');
+    L.push('整批悬浮液 '+f(r.totalSlurry,0)+' mL（干酵母 '+f(r.totalYeast,2)+' g）');
+  }
+  L.push('成品酒精度约 '+f(r.abvAfter,2)+'%vol');
+  L.push('---');
+  L.push('⚠️ 估算值，不是实测。压力用亨利定律+纯水系数，实际略低。');
+  L.push('⚠️ 酵母参数来自厂商公开资料，用前请核对原始数据表。');
+  L.push('⚠️ 再发酵风险只能靠加速试验判定（4℃/20℃/33℃ 各几瓶，4 周）。');
+  return L.join('\n');
+}
+function copyText(t){
+  if(navigator.clipboard) navigator.clipboard.writeText(t).then(function(){ toast('已复制'); },function(){ alert(t); });
+  else alert(t);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  if(dismissed()) document.getElementById('firstNotice').style.display='none';
+  document.getElementById('btnDismissNotice').addEventListener('click', function(){
+    try{ localStorage.setItem(NOTICE_KEY,'1'); }catch(e){}
+    document.getElementById('firstNotice').style.display='none';
+    toast('提示已隐藏，刷新页面会重新出现');
+  });
+  document.querySelectorAll('nav button').forEach(function(b){
+    b.addEventListener('click', function(){ switchTab(b.dataset.tab); });
+  });
+  document.querySelectorAll('#segBottle button').forEach(function(b){
+    b.addEventListener('click', function(){
+      state.bottle=+b.dataset.v;
+      document.querySelectorAll('#segBottle button').forEach(function(x){ x.classList.toggle('on', x===b); });
+      document.getElementById('head').value=Math.round(state.bottle*0.035);
+      switchTab(state.tab);
+    });
+  });
+  ['head','tempC','baseAbv','baseSugar','sugar','targetP','bottles','slurry','strain','sugarType'].forEach(function(id){
+    var e=document.getElementById(id);
+    if(e){ e.addEventListener('input', function(){ switchTab(state.tab); }); e.addEventListener('change', function(){ switchTab(state.tab); }); }
+  });
+  document.getElementById('btnCalc').addEventListener('click', function(){ renderForward(); });
+  document.getElementById('btnSolve').addEventListener('click', function(){ renderReverse(); });
+  document.getElementById('btnCopy').addEventListener('click', function(){ copyText(summaryText(compute(),false)); });
+  document.getElementById('btnRevCopy').addEventListener('click', function(){
+    var r=compute();
+    copyText(summaryText({pGauge:num('targetP'),co2Vol:0,sugar:0,bottle:state.bottle,bottles:r.bottles,
+      tc:r.tc,strain:r.strain,yeastPerBottle:r.yeastPerBottle,slurry:r.slurry,slurryPerBottle:r.slurryPerBottle,
+      totalSlurry:r.totalSlurry,totalYeast:r.totalYeast,abvAfter:r.abvAfter,vLiqL:r.vLiqL},true));
+  });
+  document.getElementById('btnReload').addEventListener('click', function(){
+    STRAINS=BUILTIN_STRAINS.slice(); STRAIN_SOURCE='builtin';
+    document.getElementById('dataWarn').style.display='none';
+    fillStrainSelect(); loadRemote();
+  });
+
+  fillStrainSelect();
+  renderStrains();
+  switchTab('forward');
+  loadRemote();
+});
+
+/* 供测试与构建使用 */
+window.TC = {
+  henryK:henryK, eqP:eqP, co2VolForPressure:co2VolForPressure,
+  sugarToCO2Vol:sugarToCO2Vol, co2VolToSugar:co2VolToSugar, abvIncrease:abvIncrease,
+  closureFor:closureFor, validateStrains:validateStrains, inocMid:inocMid,
+  compute:compute, warnings:warnings, state:state, ATM:ATM,
+  inocEffective:inocEffective, getGenericRate:function(){ return GENERIC_RATE; },
+  setGenericRate:function(r){ GENERIC_RATE=r; },
+  SUGAR_TYPES:SUGAR_TYPES, sugarById:sugarById, K_TABLE:K_TABLE,
+  findStrain:findStrain,
+  getStrains:function(){ return STRAINS; }, setStrains:function(l,s){ applyStrains(l,s||'builtin'); },
+  renderForward:renderForward, renderReverse:renderReverse, renderStrains:renderStrains,
+  switchTab:switchTab, summaryText:summaryText
+};
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "瓶内二次发酵计算器 · OLD APPPPLE",
+  "short_name": "瓶中二发",
+  "description": "瓶内二次发酵：补糖量 ↔ 瓶内压 正反算，含 10 株常用酵母的投量与复水参数",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F7FA",
+  "theme_color": "#1B4B72",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
