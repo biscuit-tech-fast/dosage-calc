@@ -1,0 +1,31 @@
+{
+  "name": "除渣补液计算器",
+  "short_name": "补液计算",
+  "description": "瓶内二次发酵苹果酒的除渣补液计算器 —— 正算成品残糖/pH/气压，反算补液量。OLD APPPPLE。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#F4F7FA",
+  "theme_color": "#1B4B72",
+  "lang": "zh-CN",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
